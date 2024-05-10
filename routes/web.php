@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+route::group(['prefix' => ''], function () {
+    route::get('/', [HomeController::class, 'index'])->name('admin.index');
+});
+route::get('/admin/login', [AdminController::class, 'login'])->name('admin.login');
+route::post('/admin/login', [AdminController::class, 'check_login']);
+route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
+    route::get('/', [AdminController::class, 'index'])->name('admin.index');
 });
